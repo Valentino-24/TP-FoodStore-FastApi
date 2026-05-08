@@ -1,29 +1,8 @@
-from sqlmodel import Session, select
+from sqlmodel import Session
 from app.models.categoria import Categoria
+from app.repositories.base import BaseRepository
 
 
-def create_categoria(session: Session, categoria: Categoria):
-    session.add(categoria)
-    session.commit()
-    session.refresh(categoria)
-    return categoria
-
-
-def get_all_categorias(session: Session):
-    return session.exec(select(Categoria)).all()
-
-
-def get_categoria_by_id(session: Session, categoria_id: int):
-    return session.get(Categoria, categoria_id)
-
-
-def update_categoria(session: Session, categoria: Categoria):
-    session.add(categoria)
-    session.commit()
-    session.refresh(categoria)
-    return categoria
-
-
-def delete_categoria(session: Session, categoria: Categoria):
-    session.delete(categoria)
-    session.commit()
+class CategoriaRepository(BaseRepository[Categoria]):
+    def __init__(self, session: Session):
+        super().__init__(session, Categoria)

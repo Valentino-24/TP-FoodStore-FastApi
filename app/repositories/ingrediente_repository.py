@@ -1,29 +1,8 @@
-from sqlmodel import Session, select
+from sqlmodel import Session
 from app.models.ingrediente import Ingrediente
+from app.repositories.base import BaseRepository
 
 
-def create_ingrediente(session: Session, ingrediente: Ingrediente):
-    session.add(ingrediente)
-    session.commit()
-    session.refresh(ingrediente)
-    return ingrediente
-
-
-def get_all_ingredientes(session: Session):
-    return session.exec(select(Ingrediente)).all()
-
-
-def get_ingrediente_by_id(session: Session, ingrediente_id: int):
-    return session.get(Ingrediente, ingrediente_id)
-
-
-def update_ingrediente(session: Session, ingrediente: Ingrediente):
-    session.add(ingrediente)
-    session.commit()
-    session.refresh(ingrediente)
-    return ingrediente
-
-
-def delete_ingrediente(session: Session, ingrediente: Ingrediente):
-    session.delete(ingrediente)
-    session.commit()
+class IngredienteRepository(BaseRepository[Ingrediente]):
+    def __init__(self, session: Session):
+        super().__init__(session, Ingrediente)

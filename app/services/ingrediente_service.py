@@ -1,36 +1,40 @@
-from sqlmodel import Session
 from app.models.ingrediente import Ingrediente
-from app.repositories import ingrediente_repository
+from app.core.uow import UnitOfWork
 
 
-def create_ingrediente(session: Session, data):
-    ingrediente = Ingrediente(**data.dict())
-    return ingrediente_repository.create_ingrediente(session, ingrediente)
+def create_ingrediente(data):
+    with UnitOfWork() as uow:
+        ingrediente = Ingrediente(**data.model_dump())
+        return uow.ingredientes.create(ingrediente)
 
 
-def get_all_ingredientes(session: Session):
-    return ingrediente_repository.get_all_ingredientes(session)
+def get_all_ingredientes():
+    with UnitOfWork() as uow:
+        return uow.ingredientes.get_all()
 
 
-def get_ingrediente(session: Session, ingrediente_id: int):
-    return ingrediente_repository.get_ingrediente_by_id(session, ingrediente_id)
+def get_ingrediente(ingrediente_id: int):
+    with UnitOfWork() as uow:
+        return uow.ingredientes.get_by_id(ingrediente_id)
 
 
-def update_ingrediente(session: Session, ingrediente_id: int, data):
-    ingrediente = get_ingrediente(session, ingrediente_id)
-    if not ingrediente:
-        return None
+def update_ingrediente(ingrediente_id: int, data):
+    with UnitOfWork() as uow:
+        ingrediente = uow.ingredientes.get_by_id(ingrediente_id)
+        if not ingrediente:
+            return None
 
-    update_data = data.dict(exclude_unset=True)
-    for key, value in update_data.items():
-        setattr(ingrediente, key, value)
+        update_data = data.model_dump(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(ingrediente, key, value)
 
-    return ingrediente_repository.update_ingrediente(session, ingrediente)
+        return uow.ingredientes.update(ingrediente)
 
 
-def delete_ingrediente(session: Session, ingrediente_id: int):
-    ingrediente = get_ingrediente(session, ingrediente_id)
-    if not ingrediente:
-        return None
-    ingrediente_repository.delete_ingrediente(session, ingrediente)
-    return True
+def delete_ingrediente(ingrediente_id: int):
+    with UnitOfWork() as uow:
+        ingrediente = uow.ingredientes.get_by_id(ingrediente_id)
+        if not ingrediente:
+            return None
+        uow.ingredientes.delete(ingrediente)
+        return True

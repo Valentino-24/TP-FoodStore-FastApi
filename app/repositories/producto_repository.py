@@ -1,17 +1,12 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 from app.models.producto import Producto
+from app.repositories.base import BaseRepository
 
 
-def create_producto(session: Session, producto: Producto):
-    session.add(producto)
-    session.commit()
-    session.refresh(producto)
-    return producto
+class ProductoRepository(BaseRepository[Producto]):
+    def __init__(self, session: Session):
+        super().__init__(session, Producto)
 
-
-def get_all_productos(session: Session):
-    return session.query(Producto).all()
-
-
-def get_producto_by_id(session: Session, producto_id: int):
-    return session.get(Producto, producto_id)
+    def get_all_with_relations(self) -> list[Producto]:
+        """Obtiene todos los productos (sin eagerly load relaciones)."""
+        return self.session.exec(select(Producto)).all()

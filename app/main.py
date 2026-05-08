@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import create_db_and_tables
-from app.routers import categoria_router
-from app.routers import producto_router
-from app.routers import ingrediente_router
+from app.routers import categoria_router, producto_router, ingrediente_router
 
 
 app = FastAPI()
