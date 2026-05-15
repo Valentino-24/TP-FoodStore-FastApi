@@ -6,15 +6,6 @@ from app.repositories.ingrediente_repository import IngredienteRepository
 
 
 class UnitOfWork:
-    """Centraliza la gestión de sesión y transacciones.
-
-    Uso típico:
-        with UnitOfWork() as uow:
-            producto = uow.productos.get_by_id(1)
-            producto.nombre = "Nuevo nombre"
-            uow.productos.update(producto)
-            uow.commit()
-    """
 
     def __init__(self):
         self.session = Session(engine)
