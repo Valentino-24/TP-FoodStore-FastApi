@@ -19,6 +19,17 @@
 - [x] Sincronización: Uso de invalidateQueries para refrescar la UI automáticamente tras un cambio.
 -  Feedback: Gestión visual de estados de "Cargando..." y "Error" en las peticiones.
 
+# Autenticación (Login / Register)
+- [x] Modelo Usuario con email único, password hasheado y roles (admin/user).
+- [x] Registro de nuevos usuarios con retorno de JWT.
+- [x] Login con retorno de JWT + datos del usuario.
+- [x] Admin hardcodeado: admin@gmail.com / admin1234 (se crea automáticamente al iniciar).
+- [x] Endpoint GET /auth/me para validar token y obtener usuario actual.
+- [x] Frontend: AuthContext con persistencia de token en localStorage.
+- [x] Frontend: LoginPage y RegisterPage con formularios y manejo de errores.
+- [x] Frontend: ProtectedRoute que redirige a /login si no hay sesión.
+- [x] Frontend: Navbar muestra nombre de usuario y botón de cerrar sesión.
+
 # Video de Presentación
 - [x] Duración: El video dura 15 minutos o menos.
 - [x] Audio/Video: La voz es clara y la resolución de pantalla permite leer el código.

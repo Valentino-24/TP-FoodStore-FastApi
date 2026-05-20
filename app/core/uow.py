@@ -3,6 +3,7 @@ from app.core.database import engine
 from app.repositories.producto_repository import ProductoRepository
 from app.repositories.categoria_repository import CategoriaRepository
 from app.repositories.ingrediente_repository import IngredienteRepository
+from app.repositories.usuario_repository import UsuarioRepository
 
 
 class UnitOfWork:
@@ -12,6 +13,7 @@ class UnitOfWork:
         self._productos: ProductoRepository | None = None
         self._categorias: CategoriaRepository | None = None
         self._ingredientes: IngredienteRepository | None = None
+        self._usuarios: UsuarioRepository | None = None
 
     def __enter__(self):
         return self
@@ -44,3 +46,9 @@ class UnitOfWork:
         if self._ingredientes is None:
             self._ingredientes = IngredienteRepository(self.session)
         return self._ingredientes
+
+    @property
+    def usuarios(self) -> UsuarioRepository:
+        if self._usuarios is None:
+            self._usuarios = UsuarioRepository(self.session)
+        return self._usuarios
